@@ -14,13 +14,19 @@ from langchain_core.output_parsers import StrOutputParser
 
 logger = logging.getLogger(__name__)
 
-class GenerationIntegrationModule:  
+
+class GenerationIntegrationModule:
     """生成集成模块 - 负责LLM集成和回答生成"""
-    
-    def __init__(self, model_name: str = "kimi-k2-0711-preview", temperature: float = 0.1, max_tokens: int = 2048):
+
+    def __init__(
+        self,
+        model_name: str = "kimi-k2-0711-preview",
+        temperature: float = 0.1,
+        max_tokens: int = 2048,
+    ):
         """
         初始化生成集成模块
-        
+
         Args:
             model_name: 模型名称
             temperature: 生成温度
@@ -31,7 +37,7 @@ class GenerationIntegrationModule:
         self.max_tokens = max_tokens
         self.llm = None
         self.setup_llm()
-    
+
     def setup_llm(self):
         """初始化大语言模型"""
         logger.info(f"正在初始化LLM: {self.model_name}")
@@ -44,13 +50,41 @@ class GenerationIntegrationModule:
             model=self.model_name,
             temperature=self.temperature,
             max_tokens=self.max_tokens,
-            moonshot_api_key=api_key
+            moonshot_api_key=api_key,
         )
-        
+
         logger.info("LLM初始化完成")
-    
 
+    def generate_meta_answer(self, query: str) -> str:
+        """
+        生成元问题的回答（不需要检索，直接基于LLM能力回答）
 
+        Args:
+            query: 用户查询
+
+        Returns:
+            生成的回答
+        """
+        logger.info(f"生成元问题回答: {query}")
+        prompt = ChatPromptTemplate.from_template("""
+你是"尝尝咸淡"RAG系统，一个专业的烹饪助手。
+你能够根据菜谱知识库回答用户关于菜谱制作的问题，包括：
+- 推荐菜品（按分类、难度、食材）
+- 查找菜谱的制作步骤和食材
+- 回答烹饪技巧相关问题
+- 查找相似菜谱
+- 使用图谱查询（如按食材查找、相似菜谱等）
+
+用户问题: {question}
+
+请直接回答用户的问题，保持友好、专业的语气。
+
+回答:""")
+
+        chain = (
+            {"question": RunnablePassthrough()} | prompt | self.llm | StrOutputParser()
+        )
+        return chain.invoke(query)
 
     def generate_basic_answer(self, query: str, context_docs: List[Document]) -> str:
         """
@@ -64,7 +98,7 @@ class GenerationIntegrationModule:
             生成的回答字符串
         """
         logger.info("正在生成基础回答")
-        context = self._build_context(context_docs) # context: str
+        context = self._build_context(context_docs)  # context: str
         # 构建提示模板
         prompt = ChatPromptTemplate.from_template("""
 你是一位专业的烹饪助手。请根据以下食谱信息回答用户的问题。
@@ -77,23 +111,22 @@ class GenerationIntegrationModule:
 请提供详细、实用的回答。如果信息不足，请诚实说明。
 
 回答:""")
-        
+
         # 使用LCEL构建链
         chain = (
-            {"question": RunnablePassthrough(), "context": lambda _:context}
+            {"question": RunnablePassthrough(), "context": lambda _: context}
             | prompt
             | self.llm
             | StrOutputParser()
         )
         answer = chain.invoke(query)
         logger.info("基础回答生成完成")
-        
+
         return answer
 
-
-
-
-    def generate_step_by_step_answer(self, query: str, context_docs: List[Document]) -> str:
+    def generate_step_by_step_answer(
+        self, query: str, context_docs: List[Document]
+    ) -> str:
         """
         生成分步骤回答
 
@@ -146,10 +179,8 @@ class GenerationIntegrationModule:
         response = chain.invoke(query)
         return response
 
-
-
     def generate_list_answer(self, query: str, context_docs: List[Document]) -> str:
-        """ 
+        """
         生成列表式回答 - 适用于推荐类查询
         Args:
             query: 用户查询
@@ -160,23 +191,27 @@ class GenerationIntegrationModule:
         """
         if not context_docs:
             return "抱歉，没有找到相关的菜品信息。"
-        
+
         # 提取菜品名称
         dish_names = []
         for doc in context_docs:
             dish_name = doc.metadata.get("dish_name", "未知菜品")
             if dish_name not in dish_names:
                 dish_names.append(dish_name)
-        
+
         # 构建简洁的列表回答
-        if len(dish_names)==1:
+        if len(dish_names) == 1:
             return f"为您推荐：{dish_names[0]}"
-        elif len(dish_names) <=3:
-            return f"为您推荐：{"\n".join([f"{i+1}. {name}" for i, name in enumerate(dish_names)])}"
+        elif len(dish_names) <= 3:
+            return f"为您推荐：{chr(10).join([f'{i + 1}. {name}' for i, name in enumerate(dish_names)])}"
         else:
-            return f"为您推荐以下菜品：\n" + "\n".join([f"{i+1}. {name}" for i, name in enumerate(dish_names[:3])]) + f"\n\n还有其他 {len(dish_names)-3} 道菜品可供选择。"
-
-
+            return (
+                f"为您推荐以下菜品：\n"
+                + "\n".join(
+                    [f"{i + 1}. {name}" for i, name in enumerate(dish_names[:3])]
+                )
+                + f"\n\n还有其他 {len(dish_names) - 3} 道菜品可供选择。"
+            )
 
     def query_rewrite(self, query: str) -> str:
         """
@@ -189,7 +224,7 @@ class GenerationIntegrationModule:
             重写后的查询或原查询
         """
         prompt = PromptTemplate(
-            template = """
+            template="""
 你是一位智能查询优化助手。请判断以下用户查询是否需要重写以提高检索效果。 如果需要，请生成更清晰、更具体的查询；如果不需要，请直接返回原查询。
 原始查询: "{query}"
 分析规则：
@@ -219,15 +254,10 @@ class GenerationIntegrationModule:
 
 请输出最终查询（如果不需要重写就返回原查询）:
 """,
-            input_variables=["query"]
+            input_variables=["query"],
         )
 
-        chain = (
-            {"query": RunnablePassthrough()}
-            | prompt
-            | self.llm
-            | StrOutputParser()
-        )
+        chain = {"query": RunnablePassthrough()} | prompt | self.llm | StrOutputParser()
 
         response = chain.invoke(query).strip()
 
@@ -239,8 +269,6 @@ class GenerationIntegrationModule:
 
         return response
 
-
-
     def query_router(self, query: str) -> str:
         """
         查询路由 - 判断查询类型以选择合适的回答生成策略
@@ -249,10 +277,10 @@ class GenerationIntegrationModule:
             query: 用户查询
 
         Returns:
-            查询类型标签，如 "general", "detail", "list"
+            查询类型标签，如 "general", "detail", "list", "meta"
         """
         prompt = ChatPromptTemplate.from_template("""
-根据用户的问题，将其分类为以下三种类型之一：
+根据用户的问题，将其分类为以下四种类型之一：
 
 1. 'list' - 用户想要获取菜品列表或推荐，只需要菜名
    例如：推荐几个素菜、有什么川菜、给我3个简单的菜
@@ -260,34 +288,29 @@ class GenerationIntegrationModule:
 2. 'detail' - 用户想要具体的制作方法或详细信息
    例如：宫保鸡丁怎么做、制作步骤、需要什么食材
 
-3. 'general' - 其他一般性问题
+3. 'meta' - 关于系统本身的元问题，不是关于菜谱的问题
+   例如：你是谁、你能做什么、怎么使用你、系统是什么
+
+4. 'general' - 其他一般性问题
    例如：什么是川菜、制作技巧、营养价值
 
-请只返回分类结果：list、detail 或 general
+请只返回分类结果：list、detail、meta 或 general
 
 用户问题: {query}
 
 分类结果:""")
 
-        chain = (
-            {"query": RunnablePassthrough()}
-            | prompt
-            | self.llm
-            | StrOutputParser()
-        )
+        chain = {"query": RunnablePassthrough()} | prompt | self.llm | StrOutputParser()
         result = chain.invoke(query).strip().lower()
 
         # 确保返回有效的路由类型
-        if result in ['list', 'detail', 'general']:
+        if result in ["list", "detail", "general", "meta"]:
             return result
         else:
-            return 'general'  # 默认类型
-
-
-
-
+            return "general"  # 默认类型
 
     """============================流式输出(LLM一边想一边输出)============================="""
+
     def generate_basic_answer_stream(self, query: str, context_docs: List[Document]):
         """
         生成基础回答流式输出，效果是“边想边说”
@@ -312,19 +335,20 @@ class GenerationIntegrationModule:
 请提供详细、实用的回答。如果信息不足，请诚实说明。
 
 回答:""")
-        
+
         chain = (
-            {"question": RunnablePassthrough(), "context": lambda _:context}
+            {"question": RunnablePassthrough(), "context": lambda _: context}
             | prompt
             | self.llm
             | StrOutputParser()
         )
-        
+
         for chunk in chain.stream(query):
             yield chunk
 
-
-    def generate_step_by_step_answer_stream(self, query: str, context_docs: List[Document]):
+    def generate_step_by_step_answer_stream(
+        self, query: str, context_docs: List[Document]
+    ):
         """
         生成详细步骤回答 - 流式输出
 
@@ -363,54 +387,49 @@ class GenerationIntegrationModule:
 - 不要强行填充无关内容
 - 重点突出实用性和可操作性
 
-回答:"""
-        )
+回答:""")
         chain = (
-            {'question':RunnablePassthrough(), 'context':lambda _:context}
+            {"question": RunnablePassthrough(), "context": lambda _: context}
             | prompt
             | self.llm
-            | StrOutputParser
+            | StrOutputParser()
         )
         for chunk in chain.stream(query):
             yield chunk
-            
 
-
-
-
-    def _build_context(self, docs: List[Document], max_length: int=2000) -> str:
+    def _build_context(self, docs: List[Document], max_length: int = 2000) -> str:
         """
         构建上下文字符串
-        
+
         Args:
             docs: 文档列表
             max_length: 最大长度
-            
+
         Returns:
             格式化的上下文字符串
         """
         if not docs:
             return "暂无相关食谱信息"
-        
+
         context_parts = []
         current_length = 0
 
         for i, doc in enumerate(docs):
             # 将元数据信息与page_content结合，作为上下文的一部分
             metadata_info = f"【食谱{i}】"
-            if 'dish_name' in doc.metadata:
+            if "dish_name" in doc.metadata:
                 metadata_info += f" {doc.metadata['dish_name']}"
-            if 'category' in doc.metadata:
+            if "category" in doc.metadata:
                 metadata_info += f" | 分类：{doc.metadata['category']}"
-            if 'difficulty' in doc.metadata:
+            if "difficulty" in doc.metadata:
                 metadata_info += f" | 难度: {doc.metadata['difficulty']}"
             doc_text_meta = f"{metadata_info}\n{doc.page_content}\n"
-            
+
             # 控制上下文长度
             if current_length + len(doc_text_meta) > max_length:
                 break
             context_parts.append(doc.page_content)
             current_length += len(doc_text_meta)
 
-        context = "\n"+"="*50 + '\n'.join(context_parts)
+        context = "\n" + "=" * 50 + "\n".join(context_parts)
         return context

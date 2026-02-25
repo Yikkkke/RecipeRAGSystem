@@ -1,8 +1,12 @@
 """
 RAG系统配置文件
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, Any
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 @dataclass
 class RAGconfig:
@@ -24,6 +28,18 @@ class RAGconfig:
     enable_console_log: bool = False
     log_file: str = "logs/recipe_rag.log"
     log_level: str = "INFO"
+
+    # Neo4j图数据库配置
+    enable_graph: bool = True
+    neo4j_uri: str = os.getenv('NEO4J_URI', 'bolt://localhost:7687')
+    neo4j_user: str = os.getenv('NEO4J_USER', 'neo4j')
+    neo4j_password: str = os.getenv('NEO4J_PASSWORD', 'password')
+
+    # 混合检索配置
+    retrieval_weight: Dict[str, float] = field(default_factory=lambda: {
+        "vector": 0.7,
+        "graph": 0.3
+    })
 
 
     def __post_init__(self):
@@ -48,7 +64,12 @@ class RAGconfig:
             'enable_file_log': self.enable_file_log,
             'enable_console_log': self.enable_console_log,
             'log_file': self.log_file,
-            'log_level': self.log_level
+            'log_level': self.log_level,
+            'enable_graph': self.enable_graph,
+            'neo4j_uri': self.neo4j_uri,
+            'neo4j_user': self.neo4j_user,
+            'neo4j_password': self.neo4j_password,
+            'retrieval_weight': self.retrieval_weight
         }
 
 # 默认配置实例

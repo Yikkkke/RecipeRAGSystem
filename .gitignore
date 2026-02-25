@@ -19,10 +19,12 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.ruff_cache
 
 # Virtual Environment
 venv/
 ENV/
+.venv
 
 # IDE
 .idea/
@@ -61,6 +63,8 @@ rag/
 *.pkl
 *.faiss
 vector_index/
+volumes/
+rag_modules/debug.ipynb
 
 # Cache
 .cache/
@@ -72,3 +76,6 @@ vector_index/
 # LLM API keys
 *.key
 *.secret
+
+# 未完成的模块
+ai_test_agent/

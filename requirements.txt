@@ -297,9 +297,7 @@ tokenizers==0.22.2
     #   langchain-huggingface
     #   transformers
 torch==2.2.2+cpu
-    # via
-    #   -r requirements.in
-    #   sentence-transformers
+    # via sentence-transformers
 tqdm==4.66.5
     # via
     #   huggingface-hub
