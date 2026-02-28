@@ -1,0 +1,192 @@
+{
+  "generated_at": "2026-02-27T23:01:03.517766",
+  "summary": {
+    "summary": {
+      "test_file": "test_data_20260227_225939.json",
+      "sample_size": 5,
+      "failed_count": 0,
+      "retrieval": {
+        "avg_precision": 0.4,
+        "avg_mrr": 0.6
+      },
+      "generation": {
+        "avg_completeness": 4.2,
+        "avg_accuracy": 4.0,
+        "avg_usefulness": 4.0,
+        "avg_score": 4.066666666666666
+      }
+    },
+    "by_type": {
+      "detail": {
+        "count": 2,
+        "retrieval": {
+          "avg_precision": 0.6666666666666666,
+          "avg_mrr": 1.0
+        },
+        "generation": {
+          "avg_completeness": 5.0,
+          "avg_accuracy": 5.0,
+          "avg_usefulness": 5.0,
+          "avg_score": 5.0
+        }
+      },
+      "list": {
+        "count": 1,
+        "retrieval": {
+          "avg_precision": 0.6666666666666666,
+          "avg_mrr": 1.0
+        },
+        "generation": {
+          "avg_completeness": 3.0,
+          "avg_accuracy": 2.0,
+          "avg_usefulness": 2.0,
+          "avg_score": 2.3333333333333335
+        }
+      },
+      "with_filter": {
+        "count": 2,
+        "retrieval": {
+          "avg_precision": 0.0,
+          "avg_mrr": 0.0
+        },
+        "generation": {
+          "avg_completeness": 4.0,
+          "avg_accuracy": 4.0,
+          "avg_usefulness": 4.0,
+          "avg_score": 4.0
+        }
+      }
+    }
+  },
+  "details": [
+    {
+      "query_id": "q1",
+      "query_text": "西葫芦炒鸡蛋怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "西葫芦炒鸡蛋",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "西葫芦炒鸡蛋",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n西葫芦炒鸡蛋是一道清爽下饭的家常快手菜，鸡蛋嫩滑、西葫芦脆甜，全程 10 分钟左右即可完成。难度两颗星，新手也能一次成功。\n\n## 🛒 所需食材（2 人份）  \n- 西葫芦 1 根（约 300 g）  \n- 鸡蛋 3 个  \n- 西红柿 1 个（可选，增加酸甜味）  \n- 食用油 10–20 ml（分两次用）  \n- 食用盐 6 g（≈ 1 小勺）\n\n## 👨‍🍳 制作步骤"
+    },
+    {
+      "query_id": "q2",
+      "query_text": "砂糖椰子冰沙怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n砂糖椰子冰沙是一款“零厨艺”也能搞定的夏日冰饮，椰香浓郁、入口即化，只需一瓶椰汁+一把砂糖就能完成。唯一要注意的是：冷冻时间长、敲打声音大，建议白天在家操作，别在深夜“扰民”。\n\n难度：★（几乎零失败）\n\n## 🛒 所需食材  \n- 瓶装椰汁 500 ml（选配料表干净、无防腐剂的原味椰汁口感最佳）  \n- 咖啡调糖或坚果碎 1–2 茶匙（装饰兼调味，可换成细砂糖、椰糖或烤"
+    },
+    {
+      "query_id": "q3",
+      "query_text": "有哪些素菜推荐",
+      "query_type": "list",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 3.0,
+        "accuracy": 2.0,
+        "usefulness": 2.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "素炒豆角",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": true
+        },
+        {
+          "name": "麻婆豆腐",
+          "is_relevant": false
+        }
+      ],
+      "generated_answer": "为您推荐：1. 素炒豆角\n2. 空气炸锅羊排\n3. 麻婆豆腐"
+    },
+    {
+      "query_id": "q4",
+      "query_text": "简单的甜品",
+      "query_type": "with_filter",
+      "retrieval_scores": {
+        "precision": 0.0,
+        "mrr": 0.0,
+        "relevant_count": 0,
+        "total_count": 0
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [],
+      "generated_answer": "既然手头没有现成的食谱，我就给你一份“零失败、零工具门槛”的 3 分钟芒果酸奶杯。只要家里有冰箱就能做，材料也极简单，新手也能一次成功。\n\n———  \n芒果酸奶杯（1 人份）\n\n材料  \n- 芒果 1 个（约 200 g，熟透更甜）  \n- 原味酸奶 150 g（浓稠型口感最好）  \n- 蜂蜜或炼乳 1 茶匙（可省）  \n- 冰块 3～4 块（可选，增加冰爽感）\n\n做法  \n1. 芒果去皮去核，果"
+    },
+    {
+      "query_id": "q5",
+      "query_text": "简单的荤菜",
+      "query_type": "with_filter",
+      "retrieval_scores": {
+        "precision": 0.0,
+        "mrr": 0.0,
+        "relevant_count": 0,
+        "total_count": 0
+      },
+      "generation_scores": {
+        "completeness": 3.0,
+        "accuracy": 3.0,
+        "usefulness": 3.0
+      },
+      "retrieved_docs": [],
+      "generated_answer": "【快手荤菜：10分钟蒜香酱油煎鸡腿】  \n（1人份，厨房小白也能零失败）\n\n一、食材（超市一次买齐）  \n1. 去骨鸡腿排 1块（约200g，冷冻柜有售）  \n2. 大蒜 3瓣  \n3. 生抽 1大勺（15 ml）  \n4. 老抽 ½小勺（3 ml，上色用，可省）  \n5. 料酒 1大勺  \n6. 白糖 ½小勺（3 g，提鲜）  \n7. 黑胡椒 少许  \n8. 食用油 1小勺（5 ml）\n\n二、3"
+    }
+  ]
+}

@@ -1,0 +1,159 @@
+[
+  {
+    "id": "q1",
+    "text": "西葫芦炒鸡蛋怎么做",
+    "type": "detail",
+    "expected_docs": ["西葫芦炒鸡蛋"],
+    "filters": null
+  },
+  {
+    "id": "q2",
+    "text": "砂糖椰子冰沙怎么做",
+    "type": "detail",
+    "expected_docs": ["砂糖椰子冰沙"],
+    "filters": null
+  },
+  {
+    "id": "q3",
+    "text": "有哪些素菜推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q4",
+    "text": "简单的甜品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "简单",
+      "category": "甜品"
+    }
+  },
+  {
+    "id": "q5",
+    "text": "简单的荤菜",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "简单",
+      "category": "荤菜"
+    }
+  },
+  {
+    "id": "q6",
+    "text": "南派红烧肉怎么做",
+    "type": "detail",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": null,
+      "category": null
+    }
+  },
+  {
+    "id": "q7",
+    "text": "清蒸生蚝的制作步骤",
+    "type": "detail",
+    "expected_docs": ["清蒸生蚝"],
+    "filters": null
+  },
+  {
+    "id": "q8",
+    "text": "红烧鱼怎么做",
+    "type": "detail",
+    "expected_docs": ["红烧鱼"],
+    "filters": null
+  },
+  {
+    "id": "q9",
+    "text": "红烧肉的制作步骤",
+    "type": "detail",
+    "expected_docs": ["红烧肉"],
+    "filters": null
+  },
+  {
+    "id": "q10",
+    "text": "宫保鸡丁的做法",
+    "type": "detail",
+    "expected_docs": ["宫保鸡丁"],
+    "filters": null
+  },
+  {
+    "id": "q11",
+    "text": "有哪些早餐推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q12",
+    "text": "简单的汤品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "简单",
+      "category": "汤品"
+    }
+  },
+  {
+    "id": "q13",
+    "text": "可乐鸡翅怎么做",
+    "type": "detail",
+    "expected_docs": ["可乐鸡翅"],
+    "filters": null
+  },
+  {
+    "id": "q14",
+    "text": "水产有哪些",
+    "type": "list",
+    "expected_docs": null,
+    "filters": {
+      "category": "水产"
+    }
+  },
+  {
+    "id": "q15",
+    "text": "回锅肉的做法",
+    "type": "detail",
+    "expected_docs": ["回锅肉"],
+    "filters": null
+  },
+  {
+    "id": "q16",
+    "text": "困难的荤菜",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "困难",
+      "category": "荤菜"
+    }
+  },
+  {
+    "id": "q17",
+    "text": "蛋炒饭怎么做",
+    "type": "detail",
+    "expected_docs": ["蛋炒饭"],
+    "filters": null
+  },
+  {
+    "id": "q18",
+    "text": "有哪些主食推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q19",
+    "text": "麻婆豆腐的制作步骤",
+    "type": "detail",
+    "expected_docs": ["麻婆豆腐"],
+    "filters": null
+  },
+  {
+    "id": "q20",
+    "text": "糖醋里脊的做法",
+    "type": "detail",
+    "expected_docs": ["糖醋里脊"],
+    "filters": null
+  }
+]

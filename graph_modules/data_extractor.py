@@ -39,15 +39,15 @@ class RecipeDataExtractor:
             recipe_data = self._extract_recipe(doc)
             if recipe_data:
                 recipes.append(recipe_data)
-                categories.add(recipe_data['category'])
-                difficulties.append(recipe_data['difficulty_star'])
+                categories.add(recipe_data["category"])
+                difficulties.append(recipe_data["difficulty_star"])
 
         logger.info(f"数据提取完成: {len(recipes)} 个菜谱, {len(categories)} 个分类")
 
         return {
-            'recipes': recipes,
-            'categories': list(categories),
-            'difficulty_levels': sorted(list(set(difficulties)))
+            "recipes": recipes,
+            "categories": list(categories),
+            "difficulty_levels": sorted(list(set(difficulties))),
         }
 
     def _extract_recipe(self, doc: Document) -> Optional[Dict[str, Any]]:
@@ -64,15 +64,15 @@ class RecipeDataExtractor:
         metadata = doc.metadata
 
         recipe_data = {
-            'name': metadata.get('dish_name', ''),
-            'category': metadata.get('category', '其他'),
-            'difficulty_star': self._extract_difficulty_star(content),
-            'difficulty_level': self._star_to_level(metadata.get('difficulty', '未知')),
-            'ingredients': self._extract_ingredients(content),
-            'steps': self._extract_steps(content)
+            "name": metadata.get("dish_name", ""),
+            "category": metadata.get("category", "其他"),
+            "difficulty_star": self._extract_difficulty_star(content),
+            "difficulty_level": self._star_to_level(metadata.get("difficulty", "未知")),
+            "ingredients": self._extract_ingredients(content),
+            "steps": self._extract_steps(content),
         }
 
-        if not recipe_data['name']:
+        if not recipe_data["name"]:
             logger.warning(f"跳过无效菜谱: {metadata.get('source', '未知')}")
             return None
 
@@ -88,7 +88,7 @@ class RecipeDataExtractor:
         Returns:
             星级数量 (1-5)
         """
-        match = re.search(r'预估烹饪难度[：:]\s*(★+)', content)
+        match = re.search(r"预估烹饪难度[：:]\s*(★+)", content)
         if match:
             stars = match.group(1)
             return min(len(stars), 5)
@@ -105,13 +105,13 @@ class RecipeDataExtractor:
             等级描述
         """
         mapping = {
-            '非常简单': '1-星',
-            '简单': '2-星',
-            '中等': '3-星',
-            '困难': '4-星',
-            '非常困难': '5-星'
+            "非常简单": "1-星",
+            "简单": "2-星",
+            "中等": "3-星",
+            "困难": "4-星",
+            "非常困难": "5-星",
         }
-        return mapping.get(difficulty_text, '3-星')
+        return mapping.get(difficulty_text, "3-星")
 
     def _extract_ingredients(self, content: str) -> List[Dict[str, str]]:
         """
@@ -125,22 +125,27 @@ class RecipeDataExtractor:
         """
         ingredients = []
 
-        section_match = re.search(r'##\s*必备原料和工具\s*\n(.*?)(?=\n##|\Z)', content, re.DOTALL)
+        section_match = re.search(
+            r"##\s*必备原料和工具\s*\n(.*?)(?=\n##|\Z)", content, re.DOTALL
+        )
         if not section_match:
             return ingredients
 
         section = section_match.group(1)
-        lines = [line.strip() for line in section.split('\n') 
-                 if line.strip() and (line.startswith('-') or line.startswith('*'))]
+        lines = [
+            line.strip()
+            for line in section.split("\n")
+            if line.strip() and (line.startswith("-") or line.startswith("*"))
+        ]
 
         for line in lines:
-            line = line.lstrip('-*').strip()
+            line = line.lstrip("-*").strip()
 
-            if re.search(r'^[【\[（(].*[）)\]】]', line):
+            if re.search(r"^[【\[（(].*[）)\]】]", line):
                 continue
 
             ingredient_info = self._parse_ingredient_line(line)
-            if ingredient_info['name']:
+            if ingredient_info["name"]:
                 ingredients.append(ingredient_info)
 
         return ingredients
@@ -155,27 +160,59 @@ class RecipeDataExtractor:
         Returns:
             食材信息字典
         """
-        ingredient_info = {'name': '', 'amount': '', 'unit': ''}
+        ingredient_info = {"name": "", "amount": "", "unit": ""}
 
-        match = re.search(r'^([^-]+)(?:（([^）]+)）|\(([^)]+)\))?\s*(\d+(?:\.\d+)?)?\s*([a-zA-Z\u4e00-\u9fa5]*[克ml个只条片块根根把勺杯碗盘斤两升毫升]*[a-zA-Z\u4e00-\u9fa5]*[克ml个只条片块根根把勺杯碗盘斤两升毫升]*)?\s*[-：:]*', line)
+        match = re.search(
+            r"^([^-]+)(?:（([^）]+)）|\(([^)]+)\))?\s*(\d+(?:\.\d+)?)?\s*([a-zA-Z\u4e00-\u9fa5]*[克ml个只条片块根根把勺杯碗盘斤两升毫升]*[a-zA-Z\u4e00-\u9fa5]*[克ml个只条片块根根把勺杯碗盘斤两升毫升]*)?\s*[-：:]*",
+            line,
+        )
 
         if match:
             name = match.group(1).strip()
             amount_match = match.group(4)
             unit_match = match.group(5)
 
-            if name and len(name) >= 2 and name not in ['饮用水', '食用油', '盐', '糖', '食用油（推荐品牌', '燃气灶', '锅', '碗与盘子', '筷子', '炒勺', '洗涤剂', '抹布', '钢丝球', '菜刀']:
-                ingredient_info['name'] = name
+            if (
+                name
+                and len(name) >= 2
+                and name
+                not in [
+                    "饮用水",
+                    "食用油",
+                    "盐",
+                    "糖",
+                    "食用油（推荐品牌",
+                    "燃气灶",
+                    "锅",
+                    "碗与盘子",
+                    "筷子",
+                    "炒勺",
+                    "洗涤剂",
+                    "抹布",
+                    "钢丝球",
+                    "菜刀",
+                ]
+            ):
+                ingredient_info["name"] = name
 
                 if amount_match:
-                    ingredient_info['amount'] = amount_match
+                    ingredient_info["amount"] = amount_match
 
-                if unit_match and unit_match not in ['推荐', '推荐品牌', '别称', '选用', '为佳']:
-                    ingredient_info['unit'] = unit_match
+                if unit_match and unit_match not in [
+                    "推荐",
+                    "推荐品牌",
+                    "别称",
+                    "选用",
+                    "为佳",
+                ]:
+                    ingredient_info["unit"] = unit_match
                 elif amount_match and not unit_match:
-                    unit_match = re.search(r'([a-zA-Z\u4e00-\u9fa5]+[克ml个只条片块根根把勺杯碗盘斤两升毫升]*)', line)
+                    unit_match = re.search(
+                        r"([a-zA-Z\u4e00-\u9fa5]+[克ml个只条片块根根把勺杯碗盘斤两升毫升]*)",
+                        line,
+                    )
                     if unit_match:
-                        ingredient_info['unit'] = unit_match.group(1)
+                        ingredient_info["unit"] = unit_match.group(1)
 
         return ingredient_info
 
@@ -191,29 +228,37 @@ class RecipeDataExtractor:
         """
         steps = []
 
-        section_match = re.search(r'##\s*操作\s*\n(.*?)(?=\n##|\n##\s*附加内容|\Z)', content, re.DOTALL)
+        section_match = re.search(
+            r"##\s*操作\s*\n(.*?)(?=\n##\s*附加内容|\Z)", content, re.DOTALL
+        )
         if not section_match:
             return steps
 
         section = section_match.group(1)
 
         lines = []
-        for line in section.split('\n'):
+        for line in section.split("\n"):
             line = line.strip()
-            if line and (line.startswith('-') or re.match(r'^\d+[\.\、]', line)):
+            if line and (
+                line.startswith("-")
+                or line.startswith("*")
+                or re.match(r"^\d+[\.\、]", line)
+            ):
                 lines.append(line)
 
         for idx, line in enumerate(lines, start=1):
-            step_text = re.sub(r'^[-\d\s\.\、]+\s*', '', line)
-            step_text = re.sub(r'!\[([^\]]*)\]\([^)]+\)', '', step_text)
-            step_text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', step_text)
+            step_text = re.sub(r"^[-\d\s\.\、]+\s*", "", line)
+            step_text = re.sub(r"!\[([^\]]*)\]\([^)]+\)", "", step_text)
+            step_text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", step_text)
 
             if step_text:
-                steps.append({
-                    'step_id': f"step_{idx}",
-                    'step_order': idx,
-                    'description': step_text.strip()
-                })
+                steps.append(
+                    {
+                        "step_id": f"step_{idx}",
+                        "step_order": idx,
+                        "description": step_text.strip(),
+                    }
+                )
 
         return steps
 
@@ -227,21 +272,21 @@ class RecipeDataExtractor:
         Returns:
             统计信息
         """
-        recipes = graph_data.get('recipes', [])
-        total_ingredients = sum(len(r.get('ingredients', [])) for r in recipes)
-        total_steps = sum(len(r.get('steps', [])) for r in recipes)
+        recipes = graph_data.get("recipes", [])
+        total_ingredients = sum(len(r.get("ingredients", [])) for r in recipes)
+        total_steps = sum(len(r.get("steps", [])) for r in recipes)
 
         unique_ingredients = set()
         for recipe in recipes:
-            for ing in recipe.get('ingredients', []):
-                if ing.get('name'):
-                    unique_ingredients.add(ing['name'])
+            for ing in recipe.get("ingredients", []):
+                if ing.get("name"):
+                    unique_ingredients.add(ing["name"])
 
         return {
-            'total_recipes': len(recipes),
-            'total_ingredients': total_ingredients,
-            'unique_ingredients': len(unique_ingredients),
-            'total_steps': total_steps,
-            'categories': graph_data.get('categories', []),
-            'difficulty_levels': graph_data.get('difficulty_levels', [])
+            "total_recipes": len(recipes),
+            "total_ingredients": total_ingredients,
+            "unique_ingredients": len(unique_ingredients),
+            "total_steps": total_steps,
+            "categories": graph_data.get("categories", []),
+            "difficulty_levels": graph_data.get("difficulty_levels", []),
         }

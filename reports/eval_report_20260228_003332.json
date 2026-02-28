@@ -1,0 +1,210 @@
+{
+  "generated_at": "2026-02-28T00:33:32.555879",
+  "summary": {
+    "summary": {
+      "test_file": "test_data_20260227_225939.json",
+      "sample_size": 6,
+      "failed_count": 0,
+      "retrieval": {
+        "avg_precision": 0.27777777777777773,
+        "avg_mrr": 0.5
+      },
+      "generation": {
+        "avg_completeness": 4.666666666666667,
+        "avg_accuracy": 4.5,
+        "avg_usefulness": 4.5,
+        "avg_score": 4.555555555555555
+      }
+    },
+    "by_type": {
+      "detail": {
+        "count": 3,
+        "retrieval": {
+          "avg_precision": 0.4444444444444444,
+          "avg_mrr": 0.6666666666666666
+        },
+        "generation": {
+          "avg_completeness": 5.0,
+          "avg_accuracy": 5.0,
+          "avg_usefulness": 5.0,
+          "avg_score": 5.0
+        }
+      },
+      "list": {
+        "count": 1,
+        "retrieval": {
+          "avg_precision": 0.3333333333333333,
+          "avg_mrr": 1.0
+        },
+        "generation": {
+          "avg_completeness": 3.0,
+          "avg_accuracy": 2.0,
+          "avg_usefulness": 2.0,
+          "avg_score": 2.3333333333333335
+        }
+      },
+      "with_filter": {
+        "count": 2,
+        "retrieval": {
+          "avg_precision": 0.0,
+          "avg_mrr": 0.0
+        },
+        "generation": {
+          "avg_completeness": 5.0,
+          "avg_accuracy": 5.0,
+          "avg_usefulness": 5.0,
+          "avg_score": 5.0
+        }
+      }
+    }
+  },
+  "details": [
+    {
+      "query_id": "q1",
+      "query_text": "西葫芦炒鸡蛋怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "西葫芦炒鸡蛋",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "西葫芦炒鸡蛋",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n西葫芦炒鸡蛋是一道清爽下饭的家常小炒，鸡蛋嫩滑、西葫芦脆软，全程 10 分钟左右即可完成，难度两颗星，新手也能轻松驾驭。\n\n## 🛒 所需食材  \n- 西葫芦 1 根（约 300 g）  \n- 鸡蛋 3 个  \n- 西红柿 1 个（可选，增加酸甜味）  \n- 食用油 10–20 ml（分两次用）  \n- 食用盐 6 g（≈ 1 小勺）\n\n## 👨‍🍳 制作步骤  \n1. 备"
+    },
+    {
+      "query_id": "q2",
+      "query_text": "砂糖椰子冰沙怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n砂糖椰子冰沙是一款“零厨艺”也能成功的快手冰饮：只需一瓶椰汁+一把砂糖（或坚果碎），冷冻后暴力“抽打”即成。口感介于椰奶雪糕与冰沙之间，椰香浓郁、颗粒感足。唯一要注意的是——动作大、声响大，白天在家做最合适。难度：★（几乎无门槛）。\n\n## 🛒 所需食材  \n- 瓶装椰汁 500 ml（推荐 100 % 纯椰汁，无果肉款更易成沙）  \n- 咖啡调糖 / 细砂糖 / 坚果碎 "
+    },
+    {
+      "query_id": "q3",
+      "query_text": "有哪些素菜推荐",
+      "query_type": "list",
+      "retrieval_scores": {
+        "precision": 0.3333333333333333,
+        "mrr": 1.0,
+        "relevant_count": 1,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 3.0,
+        "accuracy": 2.0,
+        "usefulness": 2.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "素炒豆角",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "麻婆豆腐",
+          "is_relevant": false
+        }
+      ],
+      "generated_answer": "为您推荐：1. 素炒豆角\n2. 空气炸锅羊排\n3. 麻婆豆腐"
+    },
+    {
+      "query_id": "q4",
+      "query_text": "简单的甜品",
+      "query_type": "with_filter",
+      "retrieval_scores": {
+        "precision": 0.0,
+        "mrr": 0.0,
+        "relevant_count": 0,
+        "total_count": 0
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [],
+      "generated_answer": "很抱歉，我手头暂时没有现成的甜品食谱。不过我可以直接给你一份“零失败、3 步就能搞定”的超简单甜品——**微波炉巧克力杯子蛋糕**（1 人份）。只要家里有微波炉、马克杯和 5 分钟，就能开吃！\n\n---\n\n### 微波炉巧克力杯子蛋糕  \n**材料**（随手就能凑齐）  \n- 中筋面粉 2 大勺（约 20 g）  \n- 细砂糖 1 大勺（约 10 g，可增减）  \n- 无糖可可粉 1 大勺（约 5"
+    },
+    {
+      "query_id": "q5",
+      "query_text": "简单的荤菜",
+      "query_type": "with_filter",
+      "retrieval_scores": {
+        "precision": 0.0,
+        "mrr": 0.0,
+        "relevant_count": 0,
+        "total_count": 0
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [],
+      "generated_answer": "既然没有现成的食谱，我就给你一道“零失败、10分钟上桌”的快手荤菜——**蒜香黄油虾仁**。只需要 5 种常见食材，一口平底锅就能搞定，新手也能一次成功。\n\n---\n\n### 蒜香黄油虾仁（2 人份）\n\n#### 食材\n- 鲜虾（或冷冻虾仁）250 g  \n- 黄油 15 g（约 1 大勺）  \n- 大蒜 3 瓣，切末  \n- 盐 1/4 茶匙  \n- 黑胡椒 少许  \n- （可选）柠檬 2 片 "
+    },
+    {
+      "query_id": "q6",
+      "query_text": "南派红烧肉怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.0,
+        "mrr": 0.0,
+        "relevant_count": 0,
+        "total_count": 0
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [],
+      "generated_answer": "## 🥘 菜品介绍\n南派红烧肉（苏式/沪式）讲究“浓油赤酱、肥而不腻、入口即化”。成品色泽红亮、酱香浓郁，带微微甜味，是江南家宴的“硬菜”。难度中等，关键在于火候与糖色的控制。\n\n## 🛒 所需食材（3–4人份）\n- 五花肉 600 g（选三层五花，厚度均匀）\n- 冰糖 30 g（或白糖25 g）\n- 生抽 40 ml（约3大勺）\n- 老抽 10 ml（约2小勺，调色用）\n- 花雕酒 50 ml（"
+    }
+  ]
+}
