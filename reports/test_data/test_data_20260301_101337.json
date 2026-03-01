@@ -1,0 +1,177 @@
+[
+  {
+    "id": "q1",
+    "text": "西葫芦炒鸡蛋怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "西葫芦炒鸡蛋"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q2",
+    "text": "砂糖椰子冰沙怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "砂糖椰子冰沙"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q3",
+    "text": "新疆大盘鸡怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "新疆大盘鸡"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q4",
+    "text": "蚂蚁上树怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "蚂蚁上树"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q5",
+    "text": "肉饼炖蛋怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "肉饼炖蛋"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q6",
+    "text": "手撕包菜怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "手撕包菜"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q7",
+    "text": "上汤娃娃菜怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "上汤娃娃菜"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q8",
+    "text": "牛奶燕麦怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "牛奶燕麦"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q9",
+    "text": "雷椒皮蛋怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "雷椒皮蛋"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q10",
+    "text": "奥利奥冰淇淋怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "奥利奥冰淇淋"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q11",
+    "text": "有哪些调料推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q12",
+    "text": "有哪些荤菜推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q13",
+    "text": "有哪些荤菜推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q14",
+    "text": "有哪些早餐推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q15",
+    "text": "有哪些饮品推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q16",
+    "text": "简单的甜品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "简单",
+      "category": "甜品"
+    }
+  },
+  {
+    "id": "q17",
+    "text": "困难的荤菜",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "困难",
+      "category": "荤菜"
+    }
+  },
+  {
+    "id": "q18",
+    "text": "困难的饮品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "困难",
+      "category": "饮品"
+    }
+  },
+  {
+    "id": "q19",
+    "text": "困难的甜品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "困难",
+      "category": "甜品"
+    }
+  },
+  {
+    "id": "q20",
+    "text": "中等的饮品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "中等",
+      "category": "饮品"
+    }
+  }
+]

@@ -57,29 +57,23 @@ class GenerationIntegrationModule:
 
     def generate_meta_answer(self, query: str) -> str:
         """
-        生成元问题的回答（不需要检索，直接基于LLM能力回答）
+        生成元问题的回答 [已废弃]
+
+        此方法已废弃，meta 类型已合并为 general 类型。
+        请使用 generate_basic_answer() 方法。
 
         Args:
             query: 用户查询
 
         Returns:
             生成的回答
+
+        Raises:
+            NotImplementedError: 此方法已废弃
         """
-        logger.info(f"生成元问题回答: {query}")
-        prompt = ChatPromptTemplate.from_template("""
-你是"尝尝咸淡"RAG系统，一个专业的烹饪助手。
-你能够根据菜谱知识库回答用户关于菜谱制作的问题，包括：
-- 推荐菜品（按分类、难度、食材）
-- 查找菜谱的制作步骤和食材
-- 回答烹饪技巧相关问题
-- 查找相似菜谱
-- 使用图谱查询（如按食材查找、相似菜谱等）
-
-用户问题: {question}
-
-请直接回答用户的问题，保持友好、专业的语气。
-
-回答:""")
+        raise NotImplementedError(
+            "generate_meta_answer() 已废弃，请使用 generate_basic_answer() 方法。"
+        )
 
         chain = (
             {"question": RunnablePassthrough()} | prompt | self.llm | StrOutputParser()
@@ -277,10 +271,10 @@ class GenerationIntegrationModule:
             query: 用户查询
 
         Returns:
-            查询类型标签，如 "general", "detail", "list", "meta"
+            查询类型标签，如 "general", "detail", "list"
         """
         prompt = ChatPromptTemplate.from_template("""
-根据用户的问题，将其分类为以下四种类型之一：
+根据用户的问题，将其分类为以下三种类型之一：
 
 1. 'list' - 用户想要获取菜品列表或推荐，只需要菜名
    例如：推荐几个素菜、有什么川菜、给我3个简单的菜
@@ -288,13 +282,10 @@ class GenerationIntegrationModule:
 2. 'detail' - 用户想要具体的制作方法或详细信息
    例如：宫保鸡丁怎么做、制作步骤、需要什么食材
 
-3. 'meta' - 关于系统本身的元问题，不是关于菜谱的问题
-   例如：你是谁、你能做什么、怎么使用你、系统是什么
+3. 'general' - 其他一般性问题
+   例如：什么是川菜、制作技巧、营养价值、你是谁、你能做什么
 
-4. 'general' - 其他一般性问题
-   例如：什么是川菜、制作技巧、营养价值
-
-请只返回分类结果：list、detail、meta 或 general
+请只返回分类结果：list、detail 或 general
 
 用户问题: {query}
 
@@ -304,7 +295,7 @@ class GenerationIntegrationModule:
         result = chain.invoke(query).strip().lower()
 
         # 确保返回有效的路由类型
-        if result in ["list", "detail", "general", "meta"]:
+        if result in ["list", "detail", "general"]:
             return result
         else:
             return "general"  # 默认类型

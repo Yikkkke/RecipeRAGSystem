@@ -246,7 +246,7 @@ class GenerationEvaluator:
             all_scores.append(scores)
 
             # 按类型统计
-            qtype = test_query.type
+            qtype = test_query.type if test_query.type else "unknown"
             if qtype not in type_stats:
                 type_stats[qtype] = {
                     "completeness": [],

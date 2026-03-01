@@ -1,0 +1,91 @@
+[
+  {
+    "id": "q1",
+    "text": "西葫芦炒鸡蛋怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "西葫芦炒鸡蛋"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q2",
+    "text": "砂糖椰子冰沙怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "砂糖椰子冰沙"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q3",
+    "text": "新疆大盘鸡怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "新疆大盘鸡"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q4",
+    "text": "蚂蚁上树怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "蚂蚁上树"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q5",
+    "text": "肉饼炖蛋怎么做",
+    "type": "detail",
+    "expected_docs": [
+      "肉饼炖蛋"
+    ],
+    "filters": null
+  },
+  {
+    "id": "q6",
+    "text": "有哪些素菜推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q7",
+    "text": "有哪些饮品推荐",
+    "type": "list",
+    "expected_docs": null,
+    "filters": null
+  },
+  {
+    "id": "q8",
+    "text": "困难的其他",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "困难",
+      "category": "其他"
+    }
+  },
+  {
+    "id": "q9",
+    "text": "简单的甜品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "简单",
+      "category": "甜品"
+    }
+  },
+  {
+    "id": "q10",
+    "text": "中等的汤品",
+    "type": "with_filter",
+    "expected_docs": null,
+    "filters": {
+      "difficulty": "中等",
+      "category": "汤品"
+    }
+  }
+]

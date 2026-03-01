@@ -7,14 +7,14 @@ from .neo4j_client import Neo4jClient
 logger = logging.getLogger(__name__)
 
 
-class HybridRetriever:
-    """混合检索器 - 结合图检索和向量检索"""
+class GraphVectorHybridRetriever:
+    """图谱+向量混合检索器 - 结合图检索和向量检索"""
 
     def __init__(
         self,
         graph_retriever: GraphRetriever,
         vector_retriever=None,
-        weights: Optional[Dict[str, float]] = None
+        weights: Optional[Dict[str, float]] = None,
     ):
         """
         初始化混合检索器
@@ -26,7 +26,7 @@ class HybridRetriever:
         """
         self.graph_retriever = graph_retriever
         self.vector_retriever = vector_retriever
-        self.weights = weights or {'graph': 0.3, 'vector': 0.7}
+        self.weights = weights or {"graph": 0.3, "vector": 0.7}
 
     def search(
         self,
@@ -34,7 +34,7 @@ class HybridRetriever:
         ingredients: Optional[List[str]] = None,
         category: Optional[str] = None,
         max_difficulty: Optional[int] = None,
-        top_k: int = 10
+        top_k: int = 10,
     ) -> List[Dict[str, Any]]:
         """
         混合搜索
@@ -55,7 +55,7 @@ class HybridRetriever:
                 ingredients=ingredients,
                 category=category,
                 max_difficulty=max_difficulty,
-                top_k=top_k
+                top_k=top_k,
             )
         else:
             results = self._graph_search(query, top_k)
@@ -68,7 +68,7 @@ class HybridRetriever:
         ingredients: Optional[List[str]],
         category: Optional[str],
         max_difficulty: Optional[int],
-        top_k: int
+        top_k: int,
     ) -> List[Dict[str, Any]]:
         """
         混合搜索（图+向量）
@@ -87,22 +87,20 @@ class HybridRetriever:
             ingredients=ingredients,
             category=category,
             max_difficulty=max_difficulty,
-            limit=top_k * 2
+            limit=top_k * 2,
         )
 
-        graph_scores = {r['name']: self.weights['graph'] for r in graph_results}
+        graph_scores = {r["name"]: self.weights["graph"] for r in graph_results}
 
         combined_results = []
         for result in graph_results:
-            name = result['name']
+            name = result["name"]
             score = graph_scores.get(name, 0)
-            combined_results.append({
-                **result,
-                'hybrid_score': score,
-                'source': 'graph'
-            })
+            combined_results.append(
+                {**result, "hybrid_score": score, "source": "graph"}
+            )
 
-        combined_results.sort(key=lambda x: x['hybrid_score'], reverse=True)
+        combined_results.sort(key=lambda x: x["hybrid_score"], reverse=True)
 
         return combined_results[:top_k]
 
@@ -133,7 +131,7 @@ class HybridRetriever:
             return self.graph_retriever.search_recipes(
                 ingredients=matched_ingredients if matched_ingredients else None,
                 category=matched_category,
-                limit=top_k
+                limit=top_k,
             )
         else:
             all_recipes = self.graph_retriever.search_recipes(limit=top_k)
@@ -150,13 +148,12 @@ class HybridRetriever:
             关键词列表
         """
         import re
-        keywords = re.findall(r'[\u4e00-\u9fa5]{2,}', text)
+
+        keywords = re.findall(r"[\u4e00-\u9fa5]{2,}", text)
         return keywords[:10]
 
     def find_recipes_with_ingredients(
-        self,
-        ingredient_names: List[str],
-        top_k: int = 10
+        self, ingredient_names: List[str], top_k: int = 10
     ) -> List[Dict[str, Any]]:
         """
         查找包含指定食材的菜谱
@@ -168,12 +165,12 @@ class HybridRetriever:
         Returns:
             匹配的菜谱列表
         """
-        return self.graph_retriever.find_recipes_by_ingredients(ingredient_names, limit=top_k)
+        return self.graph_retriever.find_recipes_by_ingredients(
+            ingredient_names, limit=top_k
+        )
 
     def find_similar_recipes(
-        self,
-        recipe_name: str,
-        top_k: int = 5
+        self, recipe_name: str, top_k: int = 5
     ) -> List[Dict[str, Any]]:
         """
         查找相似菜谱

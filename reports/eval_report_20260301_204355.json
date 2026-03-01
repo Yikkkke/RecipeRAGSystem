@@ -1,0 +1,369 @@
+{
+  "generated_at": "2026-03-01T20:43:55.776504",
+  "summary": {
+    "summary": {
+      "test_file": "test_data_20260301_115406.json",
+      "sample_size": 10,
+      "failed_count": 0,
+      "retrieval": {
+        "avg_precision": 0.7,
+        "avg_mrr": 0.9
+      },
+      "generation": {
+        "avg_completeness": 4.6,
+        "avg_accuracy": 5.0,
+        "avg_usefulness": 4.3,
+        "avg_score": 4.633333333333334
+      }
+    },
+    "by_type": {
+      "detail": {
+        "count": 5,
+        "retrieval": {
+          "avg_precision": 0.6,
+          "avg_mrr": 1.0
+        },
+        "generation": {
+          "avg_completeness": 5.0,
+          "avg_accuracy": 5.0,
+          "avg_usefulness": 5.0,
+          "avg_score": 5.0
+        }
+      },
+      "list": {
+        "count": 4,
+        "retrieval": {
+          "avg_precision": 1.0,
+          "avg_mrr": 1.0
+        },
+        "generation": {
+          "avg_completeness": 4.0,
+          "avg_accuracy": 5.0,
+          "avg_usefulness": 3.25,
+          "avg_score": 4.083333333333333
+        }
+      },
+      "general": {
+        "count": 1,
+        "retrieval": {
+          "avg_precision": 0.0,
+          "avg_mrr": 0.0
+        },
+        "generation": {
+          "avg_completeness": 5.0,
+          "avg_accuracy": 5.0,
+          "avg_usefulness": 5.0,
+          "avg_score": 5.0
+        }
+      }
+    }
+  },
+  "details": [
+    {
+      "query_id": "q1",
+      "query_text": "西葫芦炒鸡蛋怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "西葫芦炒鸡蛋",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "西葫芦炒鸡蛋",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n西葫芦炒鸡蛋是一道清爽下饭的家常快手菜，颜色明快、口感脆嫩，鸡蛋香软、西葫芦多汁，全程 10 分钟左右即可完成。难度两颗星，新手也能一次成功。\n\n## 🛒 所需食材（2 人份）  \n- 西葫芦 500 g  \n- 鸡蛋 3 个  \n- 西红柿 100 g（可选，提鲜增汁）  \n- 食用油 10–20 ml（分两次用）  \n- 食用盐 6 g  \n\n## 👨‍🍳 制作步骤  \n1. 备料（2 min）  \n   ‑ 西红柿洗净切小块；西葫芦洗净，切成约 4 cm 的菱形片；鸡蛋打入碗中，用筷子充分打散至无筋络。  \n\n2. 炒鸡蛋（1.5 min）  \n   ‑ 锅烧热，倒入 5–10 ml 油，油热后倒入蛋液。  \n   ‑ 中火快速翻炒至蛋液凝固成块，用锅铲划成适口小块，盛出备用。  \n\n3. 炒西红柿（1 min）  \n   ‑ 锅内再加 5–10 ml 油，下西红柿，中火炒至软烂出汁。  \n\n4. 炒西葫芦（4–5 min）  \n   ‑ 倒入西葫芦片，与西红柿翻炒均匀。  \n   ‑ 撒入 6 g 盐，转小火，盖锅焖 4–5 min，让西葫芦出水变软但仍保持脆感。  \n\n5. 合炒出锅（15 s）  \n   ‑ 开盖，倒入炒好的鸡蛋，转中火快速翻炒 15 秒，让鸡蛋吸足汤汁。  \n   ‑ 关火，装盘即可。\n\n## 💡 制作技巧  \n- 西葫芦易出水，焖煮时火别太大，时间控制在 5 分钟以内，口感最脆嫩。  \n- 鸡蛋先炒后放，可避免过度吸盐，保持蓬松口感。  \n- 若喜欢更鲜，可在蛋液里加 1 小勺水或少许料酒，炒出的鸡蛋更嫩。"
+    },
+    {
+      "query_id": "q2",
+      "query_text": "砂糖椰子冰沙怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n砂糖椰子冰沙是一款“零厨艺”也能成功的夏日快手饮品，口感介于椰奶雪糕与刨冰之间，椰香浓郁、颗粒感足。唯一需要提前准备的就是把椰汁冻成冰，再“暴力”敲成冰沙即可。难度仅 1 颗星，但抽打环节动静较大，建议白天在家操作。\n\n## 🛒 所需食材  \n- 瓶装椰汁 500 ml（瓶口大、塑料瓶装最佳）  \n- 咖啡调糖（黄色粗粒）10 g ≈ 2 包太古咖啡调糖  \n- 坚果碎（可选，增加口感）\n\n## 👨‍🍳 制作步骤  \n1. 预冻椰汁（前一晚完成）  \n   ‑ 打开 500 ml 瓶装椰汁，倒出约 200 ml（防止结冰膨胀爆瓶），立即拧紧瓶盖。  \n   ‑ 将瓶子平放或直立放入冰箱冷冻室，-18 ℃冷冻 ≥10 小时，最多 7 天。  \n\n2. 取出并检查（1 min）  \n   ‑ 确认椰汁已完全冻硬，轻摇无液体晃动声即可。  \n\n3. 暴力敲冰（2-3 min）  \n   ‑ 把冻硬的椰汁瓶拿到墙角、椅背或桌角等坚硬表面，用力连续抽打瓶身。  \n   ‑ 每面敲打 10-15 下，直到听到“沙沙”声，瓶内冰块变成细腻冰沙。  \n\n4. 倒出冰沙（30 s）  \n   ‑ 打开瓶盖，将松散的椰汁冰沙直接倒入杯中。  \n\n5. 调味与装饰（30 s）  \n   ‑ 在冰沙表面均匀撒上咖啡调糖；喜欢坚果香可再撒少许坚果碎。  \n\n6. 享用  \n   ‑ 冰沙室温下可维持约 30 min，尽快食用口感最佳。\n\n## 💡 制作技巧  \n- 瓶口越大，倒出冰沙越顺畅；若瓶口小，可用长柄勺辅助挖出。  \n- 抽打时戴厨房手套防滑，也避免瓶子突然破裂划伤手。  \n- 若一次吃不完，将剩余冰沙连同瓶子放回冷冻室，可再保存 1-2 天，但口感会略变粗。"
+    },
+    {
+      "query_id": "q3",
+      "query_text": "新疆大盘鸡怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "新疆大盘鸡",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "新疆大盘鸡",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n新疆大盘鸡色泽红亮、香辣浓郁，鸡肉嫩滑、土豆软糯，汤汁拌宽面更是一绝。难度 4 星，关键在于“炒糖色”和“收汁火候”，新手只要按步骤操作也能成功。\n\n## 🛒 所需食材（2 人份）  \n| 食材 | 用量 | 备注 |\n|---|---|---|\n| 鸡腿肉 | 约 1 kg（2 只火枪腿） | 带骨更香 |\n| 土豆 | 2 个 ≈ 750 g | 切滚刀块 |\n| 大葱 | 100 g | 切段 4 cm |\n| 菜椒 & 甜椒 | 各 1 个 ≈ 50 g | 配色用，可省 |\n| 干线椒 | 5 个 | 根据辣度增减 |\n| 大蒜 | 4 瓣 | 拍扁即可 |\n| 花椒 | 1 小撮 | 约 1 g |\n| 香叶 | 2 片 | |\n| 香果（草果） | 1 颗 | 拍裂 |\n| 白砂糖 | 20 g | 炒糖色 |\n| 盐 | 5 g | |\n| 生抽 | 7 ml | ≈ 1 汤匙 |\n| 蚝油 | 10 g | ≈ 1 汤匙 |\n| 料酒 / 啤酒 | 100 ml | 去腥增香 |\n| 清水 | 1 L | |\n| 食用油 | 50 g | |\n\n## 👨‍🍳 制作步骤  \n1. 预处理（5 min）  \n   • 鸡腿剁 4 cm 块，清水+1 撮盐浸泡 5 min → 倒掉血水 → 沥干。  \n   • 土豆削皮切滚刀块（4 cm 左右），青红椒切块，大葱切段，蒜拍扁，干线椒剪段。\n\n2. 炒糖色（3 min）  \n   • 热锅倒 50 g 油 → 小火放 20 g 白糖 → 锅铲不停划圈炒至焦黄色（冒小泡即可，别炒糊）。  \n   • 立即倒入鸡肉，大火翻炒 2 min，让每块肉均匀裹上糖色。\n\n3. 爆香 & 调味（2 min）  \n   • 下花椒、香叶、香果、干线椒、蒜瓣 → 炒 30 s 出香。  \n   • 加盐 5 g、生抽 7 ml、蚝油 10 g、料酒 100 ml，翻炒均匀。\n\n4. 炖煮（25 min）  \n   • 倒入 1 L 清水 → 大火烧开 → 转中小火盖盖炖 20 min。  \n   • 汤汁剩一半时，把土豆“铺”在鸡肉表面（不要翻动，防粘锅），继续盖盖炖 5 min。\n\n5. 加蔬菜 & 收汁（5 min）  \n   • 土豆能用筷子轻松插入时，撒入大葱段、青红椒块 → 盖盖再炖 2 min。  \n   • 开盖转中大火，轻轻翻动让土豆吸汁，收到汤汁浓稠、油亮挂汁即可关火。\n\n6. 配皮带面（可选）  \n   • 另起锅煮宽面 → 捞出过冷水 → 直接铺在大盘鸡上，拌匀开吃！\n\n## 💡 制作技巧  \n- 炒糖色宁浅勿深：颜色一到位立即下肉，糊了会发苦。  \n- 土豆后放且“铺”不“翻”，可避免粘锅、保持形状完整。  \n- 啤酒代替料酒，麦香更浓；嗜辣者可在爆香时加 1 勺豆瓣酱。  \n- 收汁时留少许汤汁，拌面才不干。"
+    },
+    {
+      "query_id": "q4",
+      "query_text": "蚂蚁上树怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.3333333333333333,
+        "mrr": 1.0,
+        "relevant_count": 1,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "蚂蚁上树",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "雪花酥",
+          "is_relevant": false
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n蚂蚁上树是一道经典川菜，粉丝吸足肉末与豆瓣酱的香辣汤汁，色泽红亮、口感滑爽，肉末像“蚂蚁”般附着在“树枝”般的粉丝上，故得此名。全程 20 分钟，难度中等，适合家庭快手菜。\n\n## 🛒 所需食材（1 份，2 人量）  \n- 红薯粉丝（干）80 g  \n- 猪肉末 150 g  \n- 郫县豆瓣酱 15 g（约 1 大勺）  \n- 生抽 10 ml（约 2 茶匙）  \n- 老抽 5 ml（约 1 茶匙）  \n- 食用油 10 ml（约 2 茶匙）  \n- 蒜末 10 g（约 2 瓣蒜）  \n- 姜末 5 g（约 2 片姜）  \n- 清水 300 ml  \n- 小葱末（可选）少许  \n\n## 👨‍🍳 制作步骤  \n1. 预处理粉丝（提前 20 min）  \n   将 80 g 干红薯粉丝放入大碗，加足量温水浸泡 20 分钟至完全变软，捞出沥干备用。  \n\n2. 备料（2 min）  \n   蒜、姜分别剁成末；小葱切花备用。  \n\n3. 炒香底料（1 min）  \n   中小火烧热锅，倒入 10 ml 食用油，下蒜末、姜末，炒约 15 秒至香味溢出。  \n\n4. 炒肉末（2 min）  \n   加入 150 g 猪肉末，用锅铲快速划散，炒至肉色发白且微微出油。  \n\n5. 炒出红油（1 min）  \n   加入 15 g 郫县豆瓣酱，继续中小火翻炒约 30 秒，看到红油析出、香气浓郁即可。  \n\n6. 调味（30 s）  \n   倒入 10 ml 生抽、5 ml 老抽，翻炒均匀让肉末上色。  \n\n7. 加汤煮粉丝（5 min）  \n   倒入 300 ml 清水，大火烧开；放入泡软的粉丝，用筷子轻轻拨散防止粘连。转中小火，保持微沸状态煮约 5 分钟，直到汤汁基本被粉丝吸干、呈粘稠发亮状态。  \n\n8. 出锅装盘（30 s）  \n   关火，根据喜好撒入少许小葱末增香，即可装盘上桌。\n\n## 💡 制作技巧  \n- 粉丝别煮过头：汤汁收干即可，再煮易断。  \n- 控盐：郫县豆瓣酱本身很咸，若口味轻可减少生抽或不再加盐。  \n- 增香：起锅前撒 0.5 g 白胡椒粉，风味更立体。"
+    },
+    {
+      "query_id": "q5",
+      "query_text": "肉饼炖蛋怎么做",
+      "query_type": "detail",
+      "retrieval_scores": {
+        "precision": 0.6666666666666666,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "肉饼炖蛋",
+          "is_relevant": true
+        },
+        {
+          "name": "空气炸锅羊排",
+          "is_relevant": false
+        },
+        {
+          "name": "肉饼炖蛋",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "## 🥘 菜品介绍  \n肉饼炖蛋是一道经典中式家常菜，肉香与蛋香交融，口感滑嫩多汁，下饭神器。难度中等，全程只需 20 分钟，新手也能一次成功。\n\n## 🛒 所需食材  \n- 猪肉末 300 g  \n- 鸡蛋 2 个（1 个拌馅，1 个放中间）  \n- 料酒 10 ml（约 2 茶匙）  \n- 生抽 20 ml（约 1.5 汤匙）  \n- 白胡椒粉 5 g（约 1 茶匙）  \n- 芝麻香油 10–15 ml（约 1 汤匙）\n\n## 👨‍🍳 制作步骤  \n\n1. 调馅（3 分钟）  \n   取一只大碗，倒入 300 g 猪肉末，加入 10 ml 料酒、20 ml 生抽、5 g 白胡椒粉、10–15 ml 芝麻香油，再打入 1 个鸡蛋。用筷子顺一个方向搅拌 2 分钟，直到肉馅起胶、略粘碗壁。\n\n2. 整形（1 分钟）  \n   取一只耐热平盘，把调好味的肉末均匀铺平，厚度约 2 cm。用勺背在肉饼正中间压出一个直径约 4 cm 的小窝，深度以能容纳一个鸡蛋为宜。\n\n3. 加蛋（30 秒）  \n   将剩下的 1 个鸡蛋完整打入小窝中，保持蛋黄居中，不要弄破。\n\n4. 蒸制（15 分钟）  \n   蒸锅内加水至约 1/4 高度，大火烧开。水沸后，把盘子放入蒸屉，盖紧锅盖，中火蒸 15 分钟。  \n   时间到关火，再焖 1 分钟让余温定型。\n\n5. 出锅（30 秒）  \n   戴隔热手套取出盘子，小心高温。表面若有多余汤汁，可轻轻倒掉或拌饭食用。\n\n## 💡 制作技巧  \n- 肉末选 7 分瘦 3 分肥，口感更嫩。  \n- 搅拌时始终顺一个方向，肉馅更弹。  \n- 蒸盘建议用浅口平盘，受热均匀、易熟。  \n- 出锅前撒少许葱花或淋几滴蒸鱼豉油，风味更足。"
+    },
+    {
+      "query_id": "q6",
+      "query_text": "有哪些素菜推荐",
+      "query_type": "list",
+      "retrieval_scores": {
+        "precision": 1.0,
+        "mrr": 1.0,
+        "relevant_count": 3,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 4.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "清蒸南瓜",
+          "is_relevant": true
+        },
+        {
+          "name": "凉拌油麦菜",
+          "is_relevant": true
+        },
+        {
+          "name": "凉拌黄瓜",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "为您推荐：1. 清蒸南瓜\n2. 凉拌油麦菜\n3. 凉拌黄瓜"
+    },
+    {
+      "query_id": "q7",
+      "query_text": "有哪些饮品推荐",
+      "query_type": "list",
+      "retrieval_scores": {
+        "precision": 1.0,
+        "mrr": 1.0,
+        "relevant_count": 3,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 3.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "酸梅汤（半成品加工）",
+          "is_relevant": true
+        },
+        {
+          "name": "奇异果菠菜特调",
+          "is_relevant": true
+        },
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "为您推荐：1. 酸梅汤（半成品加工）\n2. 奇异果菠菜特调\n3. 砂糖椰子冰沙"
+    },
+    {
+      "query_id": "q8",
+      "query_text": "困难的其他",
+      "query_type": "general",
+      "retrieval_scores": {
+        "precision": 0.0,
+        "mrr": 0.0,
+        "relevant_count": 0,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 5.0,
+        "accuracy": 5.0,
+        "usefulness": 5.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "奇异果菠菜特调",
+          "is_relevant": false
+        },
+        {
+          "name": "砂糖椰子冰沙",
+          "is_relevant": false
+        },
+        {
+          "name": "酸梅汤（半成品加工）",
+          "is_relevant": false
+        }
+      ],
+      "generated_answer": "简单易做的家常菜推荐（3 选 1，10 分钟搞定）\n\n1. 奇异果菠菜特调  \n   难度：★  \n   做法：奇异果 2 个去皮切块＋苹果 ½ 个切丁＋菠菜叶 4 片去梗切碎，全部倒进榨汁机，加水 700 ml、白砂糖 0–12 g（按口味），打 4 个 15 秒即可。清爽、无油烟，全程 3 分钟。\n\n2. 砂糖椰子冰沙  \n   难度：★  \n   做法：提前把 500 ml 瓶装椰汁冷冻 10 小时；取出后用力敲成冰沙，倒杯子里，撒 10 g 咖啡调糖或坚果碎。零烹饪、零失败，白天 2 分钟完成。\n\n3. 酸梅汤（半成品版）  \n   难度：★  \n   做法：1177 ml 凉水＋120 g 酸梅晶，分两次各搅拌 50 圈；喜甜加 9 g 方糖再搅 100 圈；想微醺可再加 48 g 二锅头搅 30 圈。冷藏后饮用，全程 5 分钟。\n\n三款都是“洗切/冲调→搅拌→开吃”的超简流程，新手也能一次成功。"
+    },
+    {
+      "query_id": "q9",
+      "query_text": "简单的甜品",
+      "query_type": "list",
+      "retrieval_scores": {
+        "precision": 1.0,
+        "mrr": 1.0,
+        "relevant_count": 2,
+        "total_count": 2
+      },
+      "generation_scores": {
+        "completeness": 3.0,
+        "accuracy": 5.0,
+        "usefulness": 4.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "龟苓膏",
+          "is_relevant": true
+        },
+        {
+          "name": "草莓冰淇淋",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "为您推荐：1. 龟苓膏\n2. 草莓冰淇淋"
+    },
+    {
+      "query_id": "q10",
+      "query_text": "中等的汤品",
+      "query_type": "list",
+      "retrieval_scores": {
+        "precision": 1.0,
+        "mrr": 1.0,
+        "relevant_count": 3,
+        "total_count": 3
+      },
+      "generation_scores": {
+        "completeness": 3.0,
+        "accuracy": 5.0,
+        "usefulness": 2.0
+      },
+      "retrieved_docs": [
+        {
+          "name": "朱雀汤",
+          "is_relevant": true
+        },
+        {
+          "name": "奶油蘑菇汤",
+          "is_relevant": true
+        },
+        {
+          "name": "米粥",
+          "is_relevant": true
+        }
+      ],
+      "generated_answer": "为您推荐：1. 朱雀汤\n2. 奶油蘑菇汤\n3. 米粥"
+    }
+  ]
+}

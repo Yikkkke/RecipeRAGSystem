@@ -24,7 +24,7 @@ from graph_modules import (
     RecipeDataExtractor,
     GraphBuilder,
     GraphRetriever,
-    HybridRetriever,
+    GraphVectorHybridRetriever,
 )
 from graph_modules.utils import (
     format_search_results,
@@ -142,8 +142,8 @@ class RecipeRAGSystem:
                 # 初始化图检索器
                 self.graph_retriever = GraphRetriever(self.graph_client)
 
-                # 初始化混合检索器
-                self.hybrid_retriever = HybridRetriever(
+                # 初始化图谱+向量混合检索器
+                self.hybrid_retriever = GraphVectorHybridRetriever(
                     graph_retriever=self.graph_retriever,
                     vector_retriever=None,
                     weights=self.config.retrieval_weight,
@@ -230,7 +230,7 @@ class RecipeRAGSystem:
             logger.error(f"构建知识图谱失败: {e}")
             print(f"❌ 构建知识图谱失败: {e}")
 
-    def answer_query(self, query: str, stream: bool = False) -> str:
+    def answer_query(self, query: str, stream: bool = False):
         """
         回答用户问题
         Args:
@@ -238,7 +238,8 @@ class RecipeRAGSystem:
             stream: 是否使用流式输出，即一边想一边回答
 
         Returns:
-            生成的回答或者生成器
+            非流式: (生成的回答, 检索到的文档列表, 路由类型) 元组
+            流式: 生成器
         """
         if self.retrieval_module is None or self.generation_module is None:
             raise ValueError("请先初始化RAG系统并构建知识库")
@@ -257,19 +258,95 @@ class RecipeRAGSystem:
             print("🤖 智能分析查询...")
             rewritten_query = self.generation_module.query_rewrite(query)
 
-        # 3. 检索相关子块（+自动应用元数据过滤）
+        # 3. 检索相关子块（统一的检索接口）
         filters = self._extract_filters_from_query(query)  # 采用原始query提取元数据
-        if filters:
-            print(f"🔍 应用过滤条件: {filters}")
-            relevant_chunks = self.retrieval_module.metadata_filtered_search(
-                query=rewritten_query,  # 采用重写后的query进行检索
-                metadata_filters=filters,
-                top_k=self.config.top_k,
-            )
+
+        relevant_chunks = self.retrieve_documents(
+            query=query,
+            query_type=route_type,
+            filters=filters,
+            rewritten_query=rewritten_query,
+        )
+
+        ## 显示检索到的子块信息
+        print(f"找到 {len(relevant_chunks)} 个相关文档块")
+        if relevant_chunks:
+            chunk_info = []
+            for chunk in relevant_chunks:
+                dish_name = chunk.metadata.get("dish_name", "未知菜品")
+                # 尝试从内容中提取章节标题
+                content_preview = chunk.page_content[:50].replace("\n", " ").strip()
+                if content_preview.startswith("#"):
+                    # 如果是标题开头，提取标题
+                    title_end = (
+                        content_preview.find("\n")
+                        if "\n" in chunk.page_content[:100]
+                        else len(content_preview)
+                    )
+                    section_title = content_preview[:title_end].strip("#").strip()
+                    chunk_info.append(f"{dish_name}({section_title})")
+                else:
+                    chunk_info.append(f"{dish_name}(内容片段)")
+            print(f"找到的文档块：{', '.join(chunk_info)}")
         else:
-            relevant_chunks = self.retrieval_module.hybrid_search(
-                query=rewritten_query, top_k=self.config.top_k
+            # 4. 没有检索到相关文档块，停止继续查找生成答案
+            if stream:
+                return "抱歉，没有找到相关的食谱信息。请尝试其他菜品名称或关键词。"
+            else:
+                return (
+                    "抱歉，没有找到相关的食谱信息。请尝试其他菜品名称或关键词。",
+                    [],
+                    route_type,
+                )
+
+        # 5. 获取父文档（所有相关的完整菜谱文档）
+        relevant_docs = self.data_module.get_parent_documents(relevant_chunks)
+        ### 显示找到的文档名称
+        doc_names = []
+        for doc in relevant_docs:
+            dish_name = doc.metadata.get("dish_name", "未知菜品")
+            doc_names.append(dish_name)
+        if doc_names:
+            logger.info(f"找到文档: {', '.join(doc_names)}")
+
+        # 6. 根据路由类型选择回答方式
+        if route_type == "list":
+            # 列表查询：直接返回菜品名称列表
+            logger.info("📝 生成列表式回答...")
+            answer = self.generation_module.generate_list_answer(
+                query=rewritten_query, context_docs=relevant_docs
             )
+            if stream:
+                return answer
+            return answer, relevant_chunks, route_type
+        elif route_type == "detail":
+            print("🤖 生成菜谱详情回答...")
+            if stream:
+                answer_generator = (
+                    self.generation_module.generate_step_by_step_answer_stream(
+                        query=rewritten_query, context_docs=relevant_chunks
+                    )
+                )
+                return answer_generator
+            else:
+                answer = self.generation_module.generate_step_by_step_answer(
+                    query=rewritten_query, context_docs=relevant_docs
+                )
+                return answer, relevant_chunks, route_type
+        else:
+            # general 类型：使用基础回答生成
+            print("🤖 生成基础回答...")
+            if stream:
+                answer_generator = self.generation_module.generate_basic_answer_stream(
+                    query=rewritten_query, context_docs=relevant_chunks
+                )
+                return answer_generator
+            else:
+                answer = self.generation_module.generate_basic_answer(
+                    query=rewritten_query, context_docs=relevant_docs
+                )
+                return answer, relevant_chunks, route_type
+
         ## 显示检索到的子块信息
         print(f"找到 {len(relevant_chunks)} 个相关文档块")
         if relevant_chunks:
@@ -325,11 +402,8 @@ class RecipeRAGSystem:
                 return self.generation_module.generate_step_by_step_answer(
                     query=rewritten_query, context_docs=relevant_docs
                 )
-        elif route_type == "meta":
-            # 元问题：跳过检索，直接生成回答
-            print("🤖 生成元问题回答...")
-            return self.generation_module.generate_meta_answer(query)
         else:
+            # general 类型：使用基础回答生成
             print("🤖 生成基础回答...")
             if stream:
                 answer_generator = self.generation_module.generate_basic_answer_stream(
@@ -368,9 +442,113 @@ class RecipeRAGSystem:
 
         return filters
 
+    def _difficulty_to_star(self, difficulty: str):
+        """难度文本转星级"""
+        mapping = {"简单": 2, "中等": 3, "困难": 4, "非常困难": 5}
+        return mapping.get(difficulty)
+
+    def _convert_graph_to_docs(self, graph_results):
+        """将图谱结果转换为 Document 对象"""
+        from langchain_core.documents import Document
+
+        docs = []
+        for result in graph_results:
+            dish_name = result.get("name")
+            if not dish_name:
+                continue
+            if self.data_module and self.data_module.documents:
+                for doc in self.data_module.documents:
+                    if doc.metadata.get("dish_name") == dish_name:
+                        docs.append(doc)
+                        break
+        return docs
+
+    def retrieve_documents(
+        self,
+        query: str,
+        query_type: str = None,
+        filters: dict = None,
+        rewritten_query: str = None,
+    ) -> List:
+        """
+        统一的文档检索接口
+
+        Args:
+            query: 原始查询文本
+            query_type: 查询类型 (detail/list/general)
+            filters: 过滤条件字典
+            rewritten_query: 重写后的查询（用于向量检索）
+
+        Returns:
+            检索到的文档列表
+        """
+        if filters is None:
+            filters = {}
+        if not query_type:
+            query_type = "detail"
+
+        # 将 with_filter 视为 list 类型
+        if query_type == "with_filter":
+            query_type = "list"
+
+        # 根据 enable_graph + query_type + filters 选择检索方式
+        if self.config.enable_graph and self.graph_retriever:
+            # 开启图谱
+            if query_type == "detail":
+                # detail 类型使用向量检索（需要具体内容）
+                if filters:
+                    print(f"🔍 使用向量检索+过滤: {filters}")
+                    return self.retrieval_module.metadata_filtered_search(
+                        query=rewritten_query or query,
+                        metadata_filters=filters,
+                        top_k=self.config.top_k,
+                    )
+                else:
+                    print("🔍 使用向量混合检索")
+                    return self.retrieval_module.hybrid_search(
+                        query=rewritten_query or query, top_k=self.config.top_k
+                    )
+            else:
+                # list/general 类型
+                if filters:
+                    # 有过滤条件 → 图谱精确匹配
+                    print(f"🔍 使用图谱检索 (精确匹配): {filters}")
+                    graph_results = self.graph_retriever.search_recipes(
+                        category=filters.get("category"),
+                        max_difficulty=self._difficulty_to_star(
+                            filters.get("difficulty")
+                        ),
+                        limit=self.config.top_k,
+                    )
+                    return self._convert_graph_to_docs(graph_results)
+                else:
+                    # 无过滤条件 → 图谱+向量混合检索
+                    print("🔍 使用图谱+向量混合检索")
+                    graph_results = self.hybrid_retriever.search(
+                        query=rewritten_query or query, top_k=self.config.top_k
+                    )
+                    return self._convert_graph_to_docs(graph_results)
+        else:
+            # 未开启图谱 → 统一使用向量检索
+            if filters:
+                print(f"🔍 使用向量检索+过滤: {filters}")
+                return self.retrieval_module.metadata_filtered_search(
+                    query=rewritten_query or query,
+                    metadata_filters=filters,
+                    top_k=self.config.top_k,
+                )
+            else:
+                print("🔍 使用向量混合检索")
+                return self.retrieval_module.hybrid_search(
+                    query=rewritten_query or query, top_k=self.config.top_k
+                )
+
     def search_by_category(self, category: str, query: str = "") -> List[str]:
         """
-        按分类搜索菜品
+        按分类搜索菜品 [已废弃]
+
+        此方法已废弃，请使用 query() 方法统一检索入口。
+        查询"简单的甜品"等带过滤条件的查询会自动使用图谱检索。
 
         Args:
             category: 菜品分类
@@ -379,25 +557,10 @@ class RecipeRAGSystem:
         Returns:
             菜品名称列表
         """
-        if not self.retrieval_module:
-            raise ValueError("请先构建知识库")
-
-        # 使用元数据过滤搜索
-        search_query = query if query else category
-        filters = {"category": category}
-
-        docs = self.retrieval_module.metadata_filtered_search(
-            search_query, filters, top_k=10
+        raise NotImplementedError(
+            "search_by_category() 已废弃，请使用 query() 方法进行检索。"
+            "带过滤条件的查询（如'简单的甜品'）会自动使用图谱检索。"
         )
-
-        # 提取菜品名称
-        dish_names = []
-        for doc in docs:
-            dish_name = doc.metadata.get("dish_name", "未知菜品")
-            if dish_name not in dish_names:
-                dish_names.append(dish_name)
-
-        return dish_names
 
     def get_ingredients_list(self, dish_name: str) -> str:
         """
@@ -424,52 +587,33 @@ class RecipeRAGSystem:
 
     def search_by_ingredients(self, ingredient_names: list, limit: int = 10) -> str:
         """
-        根据食材搜索菜谱（使用图谱）
+        根据食材搜索菜谱 [已废弃]
 
-        Args:
-            ingredient_names: 食材名称列表
-            limit: 返回结果数量
-
-        Returns:
-            格式化的菜谱列表
+        此方法已废弃，请使用 query() 方法统一检索入口。
         """
-        if not self.graph_retriever:
-            return "图检索未启用，请先启用图数据库"
-
-        results = self.graph_retriever.find_recipes_by_ingredients(
-            ingredient_names, limit
+        raise NotImplementedError(
+            "search_by_ingredients() 已废弃，请使用 query() 方法进行检索。"
         )
-        return format_search_results(results, limit)
 
     def search_similar_recipes(self, recipe_name: str, limit: int = 5) -> str:
         """
-        查找相似菜谱（使用图谱）
+        查找相似菜谱 [已废弃]
 
-        Args:
-            recipe_name: 菜谱名称
-            limit: 返回结果数量
-
-        Returns:
-            格式化的相似菜谱列表
+        此方法已废弃，请使用 query() 方法统一检索入口。
         """
-        if not self.graph_retriever:
-            return "图检索未启用，请先启用图数据库"
-
-        results = self.graph_retriever.find_similar_recipes(recipe_name, limit)
-        return format_search_results(results, limit)
+        raise NotImplementedError(
+            "search_similar_recipes() 已废弃，请使用 query() 方法进行检索。"
+        )
 
     def get_recipe_graph_details(self, recipe_name: str) -> str:
         """
-        获取菜谱的图谱详情
+        获取菜谱的图谱详情 [已废弃]
 
-        Args:
-            recipe_name: 菜谱名称
-
-        Returns:
-            格式化的菜谱详情
+        此方法已废弃，请使用 query() 方法统一检索入口。
         """
-        if not self.graph_retriever:
-            return "图检索未启用，请先启用图数据库"
+        raise NotImplementedError(
+            "get_recipe_graph_details() 已废弃，请使用 query() 方法进行检索。"
+        )
 
         details = self.graph_retriever.get_recipe_details(recipe_name)
 
@@ -522,38 +666,17 @@ class RecipeRAGSystem:
                     break
                 use_stream = stream_choice != "n"
 
-                # 检查是否是图谱查询
-                if user_input.startswith("按食材查找") or user_input.startswith(
-                    "相似菜谱"
-                ):
-                    print("\n回答：")
-                    if "按食材查找" in user_input:
-                        ingredients_str = user_input.replace("按食材查找", "").strip()
-                        if ingredients_str:
-                            ingredients = [
-                                ing.strip() for ing in ingredients_str.split(",")
-                            ]
-                            answer = self.search_by_ingredients(ingredients)
-                        else:
-                            answer = "请输入食材名称，例如：按食材查找 土豆,洋葱"
-                    elif "相似菜谱" in user_input:
-                        recipe_name = user_input.replace("相似菜谱", "").strip()
-                        if recipe_name:
-                            answer = self.search_similar_recipes(recipe_name)
-                        else:
-                            answer = "请输入菜谱名称，例如：相似菜谱 清蒸鲈鱼"
-                    print(answer)
+                # 统一使用 answer_query 方法处理所有查询
+                print("\n回答：")
+                if use_stream:
+                    # 流式输出
+                    for chunk in self.answer_query(user_input, stream=True):
+                        print(chunk, end="", flush=True)
+                    print("\n")
                 else:
-                    print("\n回答：")
-                    if use_stream:
-                        # 流式输出
-                        for chunk in self.answer_query(user_input, stream=True):
-                            print(chunk, end="", flush=True)
-                        print("\n")
-                    else:
-                        # 普通输出
-                        answer = self.answer_query(user_input, stream=False)
-                        print(answer)
+                    # 普通输出
+                    answer = self.answer_query(user_input, stream=False)
+                    print(answer)
 
             except KeyboardInterrupt:
                 break

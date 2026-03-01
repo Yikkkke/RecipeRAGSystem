@@ -165,7 +165,7 @@ class RecipeRAGEvaluator:
         self, test_queries: List[TestQuery], top_k: int
     ) -> List[Dict[str, Any]]:
         """
-        对每个测试query执行检索和评估
+        对每个测试query执行检索和评估 - 复用主系统的完整流程
 
         Args:
             test_queries: 测试查询列表
@@ -181,21 +181,27 @@ class RecipeRAGEvaluator:
             print(f"\n[{i + 1}/{total}] 评估: {query.text}")
 
             try:
-                # ====== 检索 ======
-                retrieved_docs = self._retrieve(query)
+                # ====== 调用主系统的 answer_query 方法 ======
+                result = self.rag.answer_query(query.text, stream=False)
+
+                # 解析返回值：(answer, retrieved_docs, route_type)
+                if isinstance(result, tuple) and len(result) == 3:
+                    generated_answer, retrieved_docs, route_type = result
+                else:
+                    # 兼容处理：流式输出等情况
+                    generated_answer = str(result) if result else ""
+                    retrieved_docs = []
+                    route_type = "unknown"
 
                 # ====== 评估检索质量 ======
                 retrieval_scores = self.retrieval_eval.evaluate(
-                    query, retrieved_docs, top_k
+                    query, retrieved_docs, top_k, route_type
                 )
 
                 # 记录检索结果
                 self.eval_logger.log_retrieval_result(
                     query.text, retrieved_docs, retrieval_scores
                 )
-
-                # ====== 生成答案 ======
-                generated_answer = self._generate(query, retrieved_docs)
 
                 # ====== 评估生成质量 ======
                 generation_scores = self.generation_eval.evaluate(
@@ -211,7 +217,7 @@ class RecipeRAGEvaluator:
                 detail = {
                     "query_id": query.id,
                     "query_text": query.text,
-                    "query_type": query.type,
+                    "query_type": route_type,
                     "retrieval_scores": retrieval_scores,
                     "generation_scores": generation_scores,
                     "retrieved_docs": [
@@ -233,65 +239,12 @@ class RecipeRAGEvaluator:
                     {
                         "query_id": query.id,
                         "query_text": query.text,
-                        "query_type": query.type,
+                        "query_type": "unknown",
                         "error": str(e),
                     }
                 )
 
         return eval_results
-
-    def _retrieve(self, query: TestQuery) -> List:
-        """
-        执行检索
-
-        Args:
-            query: 测试查询
-
-        Returns:
-            检索到的文档列表
-        """
-        # 根据query类型选择检索方式
-        if query.filters:
-            # 有过滤条件，使用元数据过滤检索
-            docs = self.rag.retrieval_module.metadata_filtered_search(
-                query=query.text,
-                metadata_filters=query.filters,
-                top_k=self.rag.config.top_k,
-            )
-        else:
-            # 普通混合检索
-            docs = self.rag.retrieval_module.hybrid_search(
-                query=query.text, top_k=self.rag.config.top_k
-            )
-
-        return docs
-
-    def _generate(self, query: TestQuery, context_docs: List) -> str:
-        """
-        生成答案
-
-        Args:
-            query: 测试查询
-            context_docs: 上下文文档
-
-        Returns:
-            生成的答案
-        """
-        # 根据query类型选择生成方式
-        if query.type == "list":
-            answer = self.rag.generation_module.generate_list_answer(
-                query=query.text, context_docs=context_docs
-            )
-        elif query.type == "detail":
-            answer = self.rag.generation_module.generate_step_by_step_answer(
-                query=query.text, context_docs=context_docs
-            )
-        else:
-            answer = self.rag.generation_module.generate_basic_answer(
-                query=query.text, context_docs=context_docs
-            )
-
-        return answer
 
     def _generate_summary(
         self, results: List[Dict[str, Any]], test_file: str
