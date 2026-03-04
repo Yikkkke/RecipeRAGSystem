@@ -37,7 +37,7 @@ class GraphVectorHybridRetriever:
         top_k: int = 10,
     ) -> List[Dict[str, Any]]:
         """
-        混合搜索
+        混合搜索 - 图+向量混合检索
 
         Args:
             query: 查询文本
@@ -49,7 +49,26 @@ class GraphVectorHybridRetriever:
         Returns:
             混合检索结果
         """
-        if ingredients or category or max_difficulty:
+        # 如果有明确的过滤条件或向量检索器可用，使用混合检索
+        if ingredients or category or max_difficulty or self.vector_retriever:
+            # 尝试从query中提取关键词（如果没有传入）
+            if not ingredients and not category:
+                keywords = self._extract_keywords(query)
+                all_ingredients = self.graph_retriever.get_all_ingredients()
+                matched_ingredients = [
+                    ing for ing in keywords if ing in all_ingredients
+                ]
+
+                all_categories = self.graph_retriever.get_all_categories()
+                matched_category = None
+                for cat in all_categories:
+                    if cat in query:
+                        matched_category = cat
+                        break
+
+                ingredients = matched_ingredients
+                category = matched_category
+
             results = self._hybrid_search(
                 query=query,
                 ingredients=ingredients,
@@ -58,6 +77,7 @@ class GraphVectorHybridRetriever:
                 top_k=top_k,
             )
         else:
+            # 没有向量检索器时，使用纯图检索
             results = self._graph_search(query, top_k)
 
         return results
@@ -71,7 +91,7 @@ class GraphVectorHybridRetriever:
         top_k: int,
     ) -> List[Dict[str, Any]]:
         """
-        混合搜索（图+向量）
+        混合搜索（图+向量）- 真正的混合检索实现
 
         Args:
             query: 查询文本
@@ -83,26 +103,51 @@ class GraphVectorHybridRetriever:
         Returns:
             混合检索结果
         """
+        all_results = {}  # doc_id -> result
+        doc_objects = {}  # doc_id -> result object
+        doc_scores = {}  # doc_id -> rrf_score
+
+        # 1. 图谱检索
         graph_results = self.graph_retriever.search_recipes(
             ingredients=ingredients,
             category=category,
             max_difficulty=max_difficulty,
             limit=top_k * 2,
         )
-
-        graph_scores = {r["name"]: self.weights["graph"] for r in graph_results}
-
-        combined_results = []
-        for result in graph_results:
-            name = result["name"]
-            score = graph_scores.get(name, 0)
-            combined_results.append(
-                {**result, "hybrid_score": score, "source": "graph"}
+        for rank, result in enumerate(graph_results):
+            doc_id = result["name"]
+            doc_objects[doc_id] = result
+            score = 1.0 / (rank + 60)  # RRF k=60
+            doc_scores[doc_id] = (
+                doc_scores.get(doc_id, 0) + score * self.weights["graph"]
             )
 
-        combined_results.sort(key=lambda x: x["hybrid_score"], reverse=True)
+        # 2. 向量检索 (如果可用)
+        if self.vector_retriever is not None:
+            try:
+                vector_docs = self.vector_retriever.get_relevant_documents(query)
+                for rank, doc in enumerate(vector_docs):
+                    dish_name = doc.metadata.get("dish_name", "")
+                    if not dish_name:
+                        continue
+                    if dish_name not in doc_objects:
+                        doc_objects[dish_name] = {"name": dish_name}
+                    score = 1.0 / (rank + 60)  # RRF k=60
+                    doc_scores[dish_name] = (
+                        doc_scores.get(dish_name, 0) + score * self.weights["vector"]
+                    )
+            except Exception as e:
+                logger.warning(f"向量检索失败: {e}")
 
-        return combined_results[:top_k]
+        # 3. 按得分排序
+        ranked = sorted(doc_scores.items(), key=lambda x: x[1], reverse=True)
+
+        combined_results = []
+        for doc_id, score in ranked[:top_k]:
+            result = doc_objects[doc_id]
+            combined_results.append({**result, "hybrid_score": score})
+
+        return combined_results
 
     def _graph_search(self, query: str, top_k: int) -> List[Dict[str, Any]]:
         """

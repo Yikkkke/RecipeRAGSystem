@@ -186,6 +186,12 @@ class RecipeRAGSystem:
         print(f"   菜品分类: {list(stats['categories'].keys())}")
         print(f"   难度分布: {stats['difficulties']}")
 
+        # 5. 更新混合检索器的向量检索器
+        if self.hybrid_retriever and self.retrieval_module:
+            self.hybrid_retriever.vector_retriever = (
+                self.retrieval_module.vector_retriever
+            )
+
         print("✅ 知识库构建完成！")
 
     def build_knowledge_graph(self):
